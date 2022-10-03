@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+# frozen_string_literal: true 
 
 # all? any? include? none? each map! map size count
 # length select find reject max min
