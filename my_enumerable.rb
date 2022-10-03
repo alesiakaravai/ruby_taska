@@ -1,7 +1,7 @@
-# frozen_string_literal: true 
+# frozen_string_literal: true
 
 # all? any? include? none? each map! map size count
-# length select find reject max min
+# length select find reject
 
 module MyEnurmerable
   def my_inject(value = nil)
@@ -24,7 +24,17 @@ module MyEnurmerable
     min_el
   end
 
-  def my_find_index(value = nil)  #доделать с мэпами && give last elem
+  def my_max
+    max_el = self[0]
+    i = 1
+    while i < size
+      max_el = self[i] if max_el < self[i]
+      i += 1
+    end
+    max_el
+  end
+
+  def my_find_index(value = nil)  # доделать с мэпами && give last elem
     index
     i = 0
     if !value.nil?

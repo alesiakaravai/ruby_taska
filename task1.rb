@@ -1,5 +1,5 @@
 # frozen_string_literal: true
- 
+
 require_relative './my_enumerable'
 
 array1 = [100, 2, 3]
@@ -20,4 +20,4 @@ end
 # p array2.inject(1000){|sum, value| sum + value}
 # p array2.my_inject{|sum, value| sum + value}
 
-p array1.my_find_all { |value| value > 0 }
+p array2.my_max
