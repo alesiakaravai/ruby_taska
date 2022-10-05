@@ -19,7 +19,7 @@ module MyEnurmerable
       end
       elements
     else
-      self
+      return self
     end
   end
 
