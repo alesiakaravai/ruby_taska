@@ -2,7 +2,7 @@
 
 require_relative './my_enumerable'
 
-array1 = [100, 2, 3]
+array1 = [100, 5, 3]
 array2 = [3, 4, 5]
 
 map1 = { foo: 0, bar: 1, baz: 0 }
@@ -22,4 +22,4 @@ end
 
 # p array2.my_count{ |value| value % 1 == 0}
 
-p %w[bar baz bat bam].my_none?('ba')
+p array1.my_any?(5)

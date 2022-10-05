@@ -1,27 +1,102 @@
 # frozen_string_literal: true
 
-# all? any? none? each map! size
-# length find reject
+# each - какой именно?
+
+# map! - не нашла
+
+# Вот эти могу написать, но есть ли разница между нимим?
+# size - не нашла
+# length - не нашла
 
 module MyEnurmerable
-  def my_none?(value = nil)    #еще не готов
+  def my_reject
+    elements
     i = 0
-    if value != nil
+    if block_given?
       while i < size
-        if value === self[i]
-          return true
-        else 
-          return false
-        end
+        elements.push(yield(self[i]))
+        i += 1
+      end
+      elements
+    else
+      self
+    end
+  end
+
+  def my_any?(value = nil)
+    i = 0
+    if !value.nil?
+      while i < size
+        return true if self[i] === value # ???
+
         i += 1
       end
     elsif block_given?
-      
+      while i < size
+        return true if yield(self[i])
 
+        i += 1
+      end
+    else
+      while i < size
+        return true if self[i]
+
+        i += 1
+      end
+    end
+    false
+  end
+
+  def my_all?(value = nil)
+    i = 0
+    if !value.nil?
+      while i < size
+        return false unless self[i] === value # ???
+
+        i += 1
+      end
+    elsif block_given?
+      while i < size
+        return false unless yield(self[i])
+
+        i += 1
+      end
+    else
+      while i < size
+        return false unless self[i]
+
+        i += 1
+      end
+    end
+    true
+  end
+
+  # еще не готов
+  def my_none?(value = nil)
+    i = 0
+    if !value.nil?
+      while i < size
+        if value === self[i]
+          return true
+        else
+          return false
+        end
+
+        i += 1
+      end
+    elsif block_given?
+      if yield(self[i])
+        return true
+      else
+        return false
+      end
+
+      i += 1
     else
       while i < size
         return false if self[i]
-          i += 1
+
+        i += 1
       end
     end
     true
@@ -57,7 +132,8 @@ module MyEnurmerable
     max_el
   end
 
-  def my_find_index(value = nil)  # доделать с мэпами && give last elem
+  # доделать с мэпами && give last elem
+  def my_find_index(value = nil)
     index
     i = 0
     if !value.nil?
@@ -78,6 +154,18 @@ module MyEnurmerable
       end
     end
     index
+  end
+
+  def my_find(if_none_proc = nil)
+    i = 0
+    if block_given?
+      while i < size
+        return self[i] if yield(self[i])
+
+        i += 1
+      end
+    end
+    if_none_proc
   end
 
   def my_find_all(value = nil)
