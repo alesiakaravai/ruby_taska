@@ -20,4 +20,6 @@ end
 # p array2.inject(1000){|sum, value| sum + value}
 # p array2.my_inject{|sum, value| sum + value}
 
-p array2.my_max
+# p array2.my_count{ |value| value % 1 == 0}
+
+p %w[bar baz bat bam].my_none?('ba')
