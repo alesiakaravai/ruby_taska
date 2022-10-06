@@ -27,7 +27,7 @@ module MyEnurmerable
     i = 0
     if !value.nil?
       while i < size
-        return true if self[i] === value # ???
+        return true if value === self[i]
 
         i += 1
       end
@@ -51,7 +51,7 @@ module MyEnurmerable
     i = 0
     if !value.nil?
       while i < size
-        return false unless self[i] === value # ???
+        return false unless value === self[i]
 
         i += 1
       end
