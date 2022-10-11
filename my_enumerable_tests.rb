@@ -4,7 +4,7 @@ require 'rspec'
 
 require_relative './my_enumerable'
 
-RSpec.describe MyEnurmerable do
+RSpec.describe MyEnumerable do
   it 'test_my_all?' do
     expect([1, 2, 3, 4].my_all?).to eq(true)
     expect(%w[a b c d].my_all?).to eq(true)
