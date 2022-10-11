@@ -4,92 +4,47 @@ module MyEnurmerable
   def my_reject
     if block_given?
       elements = []
-      each {|x| elements << x unless yield(x)}
+      each { |x| elements << x unless yield(x) }
       elements
     else
-      enum = Enumerator.new {|y| each {|x| y << x } }   #здесь должен "<Enumerator: [array]:reject>", но не знаю как
+      Enumerator.new { |y| each { |x| y << x } } # здесь должен "<Enumerator: [array]:reject>", но не знаю как
     end
   end
 
   def my_any?(value = nil)
-    i = 0
     if !value.nil?
-      while i < size
-        return true if value === self[i]
-
-        i += 1
-      end
+      each { |x| return true if value === x }
     elsif block_given?
-      while i < size
-        return true if yield(self[i])
-
-        i += 1
-      end
+      each { |x| return true if yield(x) }
     else
-      while i < size
-        return true if self[i]
-
-        i += 1
-      end
+      each { |x| return true if x }
     end
     false
   end
 
   def my_all?(value = nil)
-    i = 0
     if !value.nil?
-      while i < size
-        return false unless value === self[i]
-
-        i += 1
-      end
+      each { |x| return false unless value === x }
     elsif block_given?
-      while i < size
-        return false unless yield(self[i])
-
-        i += 1
-      end
+      each { |x| return false unless yield(x) }
     else
-      while i < size
-        return false unless self[i]
-
-        i += 1
-      end
+      each { |x| return false unless x }
     end
     true
   end
 
-  # еще не готов
   def my_none?(value = nil)
-    i = 0
-    if !value.nil?
-      while i < size
-        if value === self[i]
-          return true
-        else
-          return false
-        end
-
-        i += 1
-      end
-    elsif block_given?
-      if yield(self[i])
-        return true
-      else
-        return false
-      end
-
-      i += 1
+    if block_given?
+      each { |x| return false if yield(x) }
+    elsif !value.nil?
+      each { |x| return false if value === x }
     else
-      while i < size
-        return false if self[i]
-
-        i += 1
-      end
+      each { |x| return false if x }
     end
     true
   end
 
+  # доделать
   def my_inject(value = nil)
     result = value.nil? ? 0 : value
     i = 0
@@ -100,14 +55,14 @@ module MyEnurmerable
     result
   end
 
-  def my_min
-    min_el = self[0]
-    i = 1
-    while i < size
-      min_el = self[i] if min_el > self[i]
-      i += 1
+  def my_min(value = nil)
+    unless value.nil?
+      array = []
+      # each { |x| }  #####
+      min = self[0]
+      each { |x| min = x if min > x }
+      min
     end
-    min_el
   end
 
   def my_max
@@ -120,7 +75,6 @@ module MyEnurmerable
     max_el
   end
 
-  # доделать с мэпами && give last elem
   def my_find_index(value = nil)
     index
     i = 0
@@ -153,6 +107,8 @@ module MyEnurmerable
         i += 1
       end
     end
+    return false if if_none_proc.nil?
+
     if_none_proc
   end
 

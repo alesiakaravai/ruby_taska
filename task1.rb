@@ -22,15 +22,13 @@ end
 
 # p array2.my_count{ |value| value % 1 == 0}
 
-#p array1.my_any?(5)
+# p array1.my_any?(5)
 
+enum = Enumerator.new { |y| array1.each { |x| y << x } }
 
-enum = Enumerator. new {|y| array1.each {|x| y << x}}
+# p enum
 
-#p enum
+# p array1.my_any?(Integer)
 
-p array1.my_reject
-#p enum
-
-
-
+p (1..4).my_all?
+# p enum
