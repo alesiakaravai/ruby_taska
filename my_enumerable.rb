@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module MyEnumerable
+module MyEnurmerable
   def my_reject
     if block_given?
       elements = []
