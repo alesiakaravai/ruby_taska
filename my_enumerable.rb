@@ -1,25 +1,13 @@
 # frozen_string_literal: true
 
-# each - какой именно?
-
-# map! - не нашла
-
-# Вот эти могу написать, но есть ли разница между нимим?
-# size - не нашла
-# length - не нашла
-
 module MyEnurmerable
   def my_reject
-    elements
-    i = 0
     if block_given?
-      while i < size
-        elements.push(yield(self[i]))
-        i += 1
-      end
+      elements = []
+      each {|x| elements << x unless yield(x)}
       elements
     else
-      return self
+      enum = Enumerator.new {|y| each {|x| y << x } }   #здесь должен "<Enumerator: [array]:reject>", но не знаю как
     end
   end
 
