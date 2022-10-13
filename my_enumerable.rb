@@ -7,7 +7,7 @@ module MyEnumerable
       each { |x| elements << x unless yield(x) }
       elements
     else
-      Enumerator.new { |y| each { |x| y << x } } # здесь должен "<Enumerator: [array]:reject>", но не знаю как
+      to_enum(:my_reject)
     end
   end
 
@@ -44,118 +44,74 @@ module MyEnumerable
     true
   end
 
-  # доделать
-  def my_inject(value = nil)
-    result = value.nil? ? 0 : value
-    i = 0
-    while i < size
-      result = yield(result, self[i])
-      i += 1
-    end
-    result
-  end
-
   def my_min(value = nil)
-    unless value.nil?
-      array = []
-      # each { |x| }  #####
-      min = self[0]
-      each { |x| min = x if min > x }
-      min
-    end
+     if value.nil?
+       min_value = self[0]
+       each { |i| min_value = i if min_value > i }
+       min_value
+     else
+       arr = self
+       (0...value).map {
+         arr.my_min
+         arr.delete(arr.my_min) }
+     end
   end
-end
-
-class Array
-    include MyEnurmerable
 
   def my_max
-    max_el = self[0]
-    i = 1
-    while i < size
-      max_el = self[i] if max_el < self[i]
-      i += 1
+    if value.nil?
+      max_value = self[0]
+      each { |i| max_value = i if max_value < i }
+      max_value
+    else
+      arr = self
+      (0...value).map {
+        arr.my_max
+        arr.delete(arr.my_max) }
     end
-    max_el
   end
 
   def my_find_index(value = nil)
-    index
-    i = 0
     if !value.nil?
-      while i < size
-        if self[i] == value
-          index = i
-          break
-        end
-        i += 1
-      end
+      (0..size).each { |x| return x if self[x] == value}
     elsif block_given?
-      while i < size
-        if yield(self[i])
-          index = i
-          break
-        end
-        i += 1
-      end
+      (0..size).each { |x| return x if yield(self[x])}
+    else 
+      return to_enum(:my_find_index)
     end
-    index
+    nil
   end
 
   def my_find(if_none_proc = nil)
-    i = 0
-    if block_given?
-      while i < size
-        return self[i] if yield(self[i])
+    to_enum(:my_find) if !block_given?
 
-        i += 1
-      end
-    end
-    return false if if_none_proc.nil?
-
-    if_none_proc
+    each {|x| return x if yield(x)}
+    if_none_proc.nil? ? nil : if_none_proc.call
   end
 
   def my_find_all(value = nil)
     elements = []
-    i = 0
     if !value.nil?
-      while i < size
-        elements.push(self[i]) if self[i] == value
-        i += 1
-      end
+      each {|x| elements << x if x == value}
     elsif block_given?
-      while i < size
-        elements.push(self[i]) if yield(self[i])
-        i += 1
-      end
+      each {|x| elements << x if yield(x)}
     end
     elements
   end
 
   def my_select
+    to_enum(:my_select) if !block_given?
     elements = []
-    i = 0
-    while i < size
-      elements.push(self[i]) if yield(self[i])
-      i += 1
-    end
+    each { |x| elements << x if yield(x) }
     elements
   end
 
   def my_count(value = nil)
     count = 0
-    i = 0
+    
     if !value.nil?
-      while i < size
-        count += 1 if value == self[i]
-        i += 1
-      end
+      each {|x| count += 1 if value == x}
     elsif block_given?
-      while i < size
-        count += 1 if yield(self[i])
-        i += 1
-      end
+      each {|x| count += 1 if yield(x)}
     else
       count = length
     end
@@ -165,27 +121,18 @@ class Array
   def my_map
     if block_given?
       elements = []
-      i = 0
-      while i < size
-        elements.push(yield(self[i]))
-        i += 1
-      end
+      each {|x| elements << yield(x)}
       return elements
     end
     self
   end
 
   def my_include?(value)
-    i = 0
-    while i < size
-      return true if value == self[i]
-
-      i += 1
-    end
+    each {|x| return true if value == x}
     false
   end
 end
 
 class Array
-  include MyEnurmerable
+  include MyEnumerable
 end

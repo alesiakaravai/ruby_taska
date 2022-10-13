@@ -22,11 +22,27 @@ end
 
 # p array1.my_any?(5)
 
-enum = Enumerator.new { |y| array1.each { |x| y << x } }
+#enum = Enumerator.new { |y| array1.each { |x| y << x } }
 
 # p enum
 
 # p array1.my_any?(Integer)
 
-p (1..4).my_all?
+#p (1..4).my_all?
 # p enum
+
+#p %w{ant bear cat}.my_none? { |word| word.length == 5 } #=> true
+#p %w{ant bear cat}.my_none? { |word| word.length >= 4 } #=> false
+#p %w{ant bear cat}.my_none?(/d/)                        #=> true
+#p [1, 3.14, 42].my_none?(Float)                         #=> false
+#p [].my_none?                                           #=> true
+#p [nil].my_none?                                        #=> true
+#p [nil, false].my_none?                                 #=> true
+#p [nil, false, true].my_none?                           #=> false
+
+#p array1.min(2){|a, b| a == b}
+
+p array1.count(100){|x| x % 1 == 0}
+
+
+
